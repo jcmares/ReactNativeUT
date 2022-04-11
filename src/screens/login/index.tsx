@@ -6,9 +6,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {styles} from './styles';
-import {LoginApi} from '../../api/LoginApi';
-import {LoginResp} from '../../interfaces/LoginResponse';
 import {useNavigation} from '@react-navigation/native';
+import { login } from '../../api/UserApi';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -18,7 +17,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState(false);
 
 
-  const login = () => {
+  const logIn = () => {
     if (username.length === 0 || username === null) {
       setUsernameError(true);
     } else {
@@ -35,7 +34,7 @@ const Login = () => {
       return;
     }
 
-    LoginApi.post<LoginResp>('/login', {
+    /*ClientApi.post<LoginResp>('/login', {
       email: username,
       password: password,
     })
@@ -50,7 +49,20 @@ const Login = () => {
         console.error(err);
         setPasswordError(true);
         setUsernameError(true);
-      });
+      });*/
+
+      login(username, password)
+      .then( (token) => {
+        if (token){
+          navigation.navigate('Home');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setPasswordError(true);
+        setUsernameError(true);
+      }) 
+
   };
 
   return (
@@ -97,7 +109,7 @@ const Login = () => {
             <TouchableWithoutFeedback
               testID="loginButton"
               onPress={() => {
-                login();
+                logIn();
               }}>
               <View style={styles.button}>
                 <Text style={styles.t2}>Login</Text>

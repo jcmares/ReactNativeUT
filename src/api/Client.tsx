@@ -1,5 +1,5 @@
 import axios  from "axios";
 
-export const LoginApi = axios.create({
+export const AxiosInstance = axios.create({
     baseURL: 'https://reqres.in/api'
 })  
